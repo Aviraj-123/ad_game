@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Adventure RPG</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="gameContainer">
+        <!-- Start Menu Screen -->
+        <div id="startMenu" class="screen active">
+            <div class="menu-content">
+                <div class="game-title">
+                    <h1>PIXEL ADVENTURE</h1>
+                    <p class="subtitle">RPG</p>
+                </div>
+                
+                <div class="menu-buttons">
+                    <button id="playBtn" class="menu-btn play-btn">
+                        <span class="btn-icon">▶</span> PLAY
+                    </button>
+                    <button id="settingsBtn" class="menu-btn settings-btn">
+                        <span class="btn-icon">⚙</span> SETTINGS
+                    </button>
+                    <button id="continueBtn" class="menu-btn continue-btn" style="display: none;">
+                        <span class="btn-icon">►</span> CONTINUE
+                    </button>
+                </div>
+
+                <div class="menu-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">High Score</span>
+                        <span id="menuHighScore" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Levels Unlocked</span>
+                        <span id="menuLevelsUnlocked" class="stat-value">1</span>
+                    </div>
+                </div>
+
+                <div class="animated-bg">
+                    <div class="pixel-star"></div>
+                    <div class="pixel-star"></div>
+                    <div class="pixel-star"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Screen -->
+        <div id="settingsScreen" class="screen">
+            <div class="settings-content">
+                <h2>SETTINGS</h2>
+                
+                <div class="settings-group">
+                    <label for="volumeSlider">Volume:</label>
+                    <div class="volume-control">
+                        <input type="range" id="volumeSlider" min="0" max="100" value="70" class="slider">
+                        <span id="volumeValue">70%</span>
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <label>Sound Effects:</label>
+                    <button id="soundToggle" class="toggle-btn active">ON</button>
+                </div>
+
+                <div class="settings-group">
+                    <label>Background Music:</label>
+                    <button id="musicToggle" class="toggle-btn active">ON</button>
+                </div>
+
+                <div class="settings-group">
+                    <label>Difficulty:</label>
+                    <select id="difficultySelect" class="difficulty-select">
+                        <option value="easy">Easy</option>
+                        <option value="normal" selected>Normal</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+
+                <div class="settings-buttons">
+                    <button id="settingsBackBtn" class="menu-btn">BACK</button>
+                    <button id="resetDataBtn" class="menu-btn danger-btn">RESET DATA</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Level Select Screen -->
+        <div id="levelSelectScreen" class="screen">
+            <div class="level-select-content">
+                <h2>SELECT LEVEL</h2>
+                <div id="levelGrid" class="level-grid"></div>
+                <button id="levelSelectBackBtn" class="menu-btn">BACK</button>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="gameScreen" class="screen">
+            <canvas id="gameCanvas" width="1280" height="720"></canvas>
+            
+            <!-- HUD -->
+            <div id="hud" class="hud">
+                <div class="hud-left">
+                    <div class="hud-item">
+                        <span class="hud-label">HP</span>
+                        <div class="health-bar">
+                            <div id="healthBarFill" class="health-fill"></div>
+                        </div>
+                        <span id="healthText">100/100</span>
+                    </div>
+                    <div class="hud-item">
+                        <span class="hud-label">XP</span>
+                        <div class="xp-bar">
+                            <div id="xpBarFill" class="xp-fill"></div>
+                        </div>
+                        <span id="xpText">0/100</span>
+                    </div>
+                </div>
+
+                <div class="hud-center">
+                    <div id="levelDisplay" class="level-display">Level 1</div>
+                </div>
+
+                <div class="hud-right">
+                    <div class="hud-item">
+                        <span class="hud-label">💰 Coins</span>
+                        <span id="coinText">0</span>
+                    </div>
+                    <div class="hud-item">
+                        <span class="hud-label">💎 Gems</span>
+                        <span id="gemText">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls Info -->
+            <div id="controlsInfo" class="controls-info">
+                <span>WASD/Arrows: Move | Space: Attack | I: Inventory | P: Pause | S: Shop</span>
+            </div>
+
+            <!-- Pause Menu -->
+            <div id="pauseMenu" class="overlay-menu" style="display: none;">
+                <div class="pause-content">
+                    <h2>PAUSED</h2>
+                    <div class="pause-buttons">
+                        <button id="resumeBtn" class="menu-btn">RESUME</button>
+                        <button id="pauseSettingsBtn" class="menu-btn">SETTINGS</button>
+                        <button id="mainMenuBtn" class="menu-btn">MAIN MENU</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory Screen -->
+        <div id="inventoryScreen" class="screen overlay-screen">
+            <div class="inventory-content">
+                <h2>INVENTORY</h2>
+                <div id="inventoryGrid" class="inventory-grid"></div>
+                <button id="inventoryCloseBtn" class="menu-btn">CLOSE (I)</button>
+            </div>
+        </div>
+
+        <!-- Shop Screen -->
+        <div id="shopScreen" class="screen overlay-screen">
+            <div class="shop-content">
+                <h2>SHOP</h2>
+                <div class="shop-coins">Coins: <span id="shopCoins">0</span></div>
+                <div id="shopGrid" class="shop-grid"></div>
+                <button id="shopCloseBtn" class="menu-btn">CLOSE (S)</button>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="gameOverScreen" class="screen">
+            <div class="game-over-content">
+                <h2 id="gameOverTitle">GAME OVER</h2>
+                <div class="game-over-stats">
+                    <div class="stat">
+                        <span class="label">Level Reached</span>
+                        <span id="gameOverLevel" class="value">1</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Coins Collected</span>
+                        <span id="gameOverCoins" class="value">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Gems Collected</span>
+                        <span id="gameOverGems" class="value">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Enemies Defeated</span>
+                        <span id="gameOverEnemies" class="value">0</span>
+                    </div>
+                </div>
+                <div class="game-over-buttons">
+                    <button id="retryBtn" class="menu-btn">RETRY</button>
+                    <button id="nextLevelBtn" class="menu-btn" style="display: none;">NEXT LEVEL</button>
+                    <button id="mainMenuFromGameOverBtn" class="menu-btn">MAIN MENU</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
